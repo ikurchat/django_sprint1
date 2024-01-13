@@ -45,14 +45,15 @@ posts = [
 
 
 def index(request):
-    return render(request, 'blog/index.html')
+    return render(request, 'blog/index.html', {'posts': list(reversed(posts))})
 
 
 def post_detail(request, id):
-    context = {
-        'id': id
-    }
-    return render(request, 'blog/detail_' + str(id) + '.html', context)
+    for post in posts:
+        if post['id'] == id:
+            selected_post = post
+            break
+    return render(request, 'blog/detail.html', {'post': selected_post})
 
 
 def category_posts(request, category_slug):
