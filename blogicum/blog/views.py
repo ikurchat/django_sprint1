@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import Http404
 
 posts = [
     {
@@ -45,14 +46,14 @@ posts = [
 
 
 def index(request):
-    return render(request, 'blog/index.html', {'posts': list(reversed(posts))})
+    return render(request, 'blog/index.html', {'posts': reversed(posts)})
 
 
-def post_detail(request, id):
-    for post in posts:
-        if post['id'] == id:
-            selected_post = post
-            break
+def post_detail(request, post_id):
+    try:
+        selected_post = next(post for post in posts if post['id'] == post_id)
+    except StopIteration:
+        raise Http404("Пост не найден")
     return render(request, 'blog/detail.html', {'post': selected_post})
 
 
