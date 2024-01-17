@@ -44,7 +44,7 @@ posts = [
     },
 ]
 
-POSTS_DICT = {post['id']: post for post in posts}
+POSTS_BY_ID = {post['id']: post for post in posts}
 
 
 def index(request):
@@ -53,8 +53,8 @@ def index(request):
 
 def post_detail(request, post_id):
     try:
-        selected_post = POSTS_DICT[post_id]
-    except StopIteration:
+        selected_post = POSTS_BY_ID[post_id]
+    except KeyError:
         raise Http404("Пост не найден")
     return render(request, 'blog/detail.html', {'post': selected_post})
 
